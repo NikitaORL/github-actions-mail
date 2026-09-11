@@ -1,4 +1,4 @@
-name: Send mail on push
+name: Saada kiri pushi korral
 
 on:
   push:
@@ -12,21 +12,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Laadi repositoorium alla
+        uses: actions/checkout@v5
 
-      - name: Send mail
+      - name: Näita pushi infot
+        run: |
+          echo "Repository: ${{ github.repository }}"
+          echo "Pusher: ${{ github.event.pusher.name }}"
+          echo "Message: ${{ github.event.head_commit.message }}"
+
+      - name: Saada kiri
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "New push in ${{ github.repository }}"
+          subject: "Uus push repositooriumis ${{ github.repository }}"
           to: nikita.orlenko234@gmail.com
           from: nikita.orlenko234@gmail.com
-          body: |
-            Repository: ${{ github.repository }}
-            Pusher: ${{ github.event.pusher.name }}
-            Commit message: ${{ github.event.head_commit.message }}
-#test
+          html_body: |
+            <h2>🚀 Uus push repositooriumis</h2>
+            <ul>
+              <li><b>Repositoorium:</b> <a href="https://github.com/${{ github.repository }}">${{ github.repository }}</a></li>
+              <li><b>Autor:</b> ${{ github.event.pusher.name }}</li>
+              <li><b>Sõnum:</b> ${{ github.event.head_commit.message }}</li>
+              <li><b>Haru:</b> ${{ github.ref_name }}</li>
+              <li><b>Aeg:</b> ${{ github.event.head_commit.timestamp }}</li>
+              <li><b>Link commitile:</b> <a href="${{ github.event.head_commit.url }}">ava</a></li>
+            </ul>
+            <hr>
+            <p style="color:#666;font-size:12px;">
+              Saadetud automaatselt GitHub Actionsi kaudu
+            </p>
