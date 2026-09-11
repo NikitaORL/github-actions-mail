@@ -24,7 +24,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "New push in ${{ github.repository }}"
           to: nikita.orlenko234@gmail.com
-          from: ${{ secrets.MAIL_USERNAME }}
+          from: nikita.orlenko234@gmail.com
           body: |
             Repository: ${{ github.repository }}
             Pusher: ${{ github.event.pusher.name }}
